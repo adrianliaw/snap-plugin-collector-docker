@@ -159,6 +159,7 @@ func (dc *DockerClient) ListContainersAsMap() (map[string]*ContainerData, error)
 			Status:     c.Status,
 			Created:    time.Unix(c.Created, 0).Format("2006-01-02T15:04:05Z07:00"),
 			Image:      c.Image,
+			Name:       c.Names[0],
 			SizeRw:     c.SizeRw,
 			SizeRootFs: c.SizeRootFs,
 			Labels:     c.Labels,

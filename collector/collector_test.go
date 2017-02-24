@@ -51,6 +51,7 @@ var mockListOfContainers = map[string]*container.ContainerData{
 			Image:      "my/image:latest",
 			Created:    time.Unix(1469187756, 0).Format("2006-01-02T15:04:05Z07:00"),
 			Status:     "Up 4 weeks",
+			Name:       "my_test_image",
 			SizeRw:     0,
 			SizeRootFs: 0,
 			Labels: map[string]string{
