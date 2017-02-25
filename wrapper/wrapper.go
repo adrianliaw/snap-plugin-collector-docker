@@ -49,6 +49,7 @@ type Specification struct {
 	Status     string            `json:"status"`
 	Created    string            `json:"creation_time"`
 	Image      string            `json:"image_name"`
+	Name       string            `json:"name"`
 	SizeRw     int64             `json:"size_rw"`
 	SizeRootFs int64             `json:"size_root_fs"`
 	Labels     map[string]string `json:"labels"`

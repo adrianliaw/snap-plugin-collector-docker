@@ -134,12 +134,21 @@ func (d *docker) CollectMetrics(mts []plugin.MetricType) ([]plugin.MetricType, e
 			}
 
 			// set new item to docker.container structure
+
+			var contName string
+			if len(contSpec.Names) == 0 {
+				contName = ""
+			} else {
+				contName = contSpec.Names[0]
+			}
+
 			d.containers[rid] = containerData{
 				ID: contSpec.ID,
 				Info: wrapper.Specification{
 					Status:     contSpec.Status,
 					Created:    time.Unix(contSpec.Created, 0).Format("2006-01-02T15:04:05Z07:00"),
 					Image:      contSpec.Image,
+					Name:       contName,
 					SizeRw:     contSpec.SizeRw,
 					SizeRootFs: contSpec.SizeRootFs,
 					Labels:     contSpec.Labels,
