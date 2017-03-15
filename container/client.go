@@ -160,7 +160,7 @@ func (dc *DockerClient) ListContainersAsMap() (map[string]*ContainerData, error)
 			Status:     c.Status,
 			Created:    time.Unix(c.Created, 0).Format("2006-01-02T15:04:05Z07:00"),
 			Image:      c.Image,
-			Name:       c.Name,
+			Name:       c.Names[0],
 			SizeRw:     c.SizeRw,
 			SizeRootFs: c.SizeRootFs,
 			Labels:     c.Labels,
@@ -193,9 +193,9 @@ func (dc *DockerClient) CollectDockerStats(container *ContainerData) error {
 	statsChan := make(chan *docker.Stats)
 	go dc.cl.Stats(docker.StatsOptions{
 		ID: container.ID,
-		Stats: stats,
+		Stats: statsChan,
 	})
-	_ := <-statsChan
+	tmp := <-statsChan
 	stats := <-statsChan
 	if stats == nil {
 		return errors.New("Failed to fetch stats")
@@ -209,6 +209,7 @@ func (dc *DockerClient) CollectDockerStats(container *ContainerData) error {
 	// if err != nil {
 	//         return err
 	// }
+	return nil
 }
 
 // FindCgroupMountpoint returns cgroup mountpoint of a given subsystem
