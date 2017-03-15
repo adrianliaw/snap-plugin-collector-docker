@@ -35,7 +35,7 @@ import (
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/cgroupfs"
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/fs"
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/network"
-	"github.com/intelsdi-x/snap-plugin-collector-docker/container/dockerstats"
+	// "github.com/intelsdi-x/snap-plugin-collector-docker/container/dockerstats"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 )
 
