@@ -195,7 +195,7 @@ func (dc *DockerClient) CollectDockerStats(container *ContainerData) error {
 		ID: container.ID,
 		Stats: statsChan,
 	})
-	tmp := <-statsChan
+	<-statsChan
 	stats := <-statsChan
 	if stats == nil {
 		return errors.New("Failed to fetch stats")
