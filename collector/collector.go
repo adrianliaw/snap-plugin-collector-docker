@@ -35,6 +35,7 @@ import (
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/cgroupfs"
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/fs"
 	"github.com/intelsdi-x/snap-plugin-collector-docker/container/network"
+	"github.com/intelsdi-x/snap-plugin-collector-docker/container/dockerstats"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 )
 
@@ -834,7 +835,7 @@ func (c *collector) collect(ridGroup map[string]map[string]struct{}, procfs stri
 				continue
 			}
 
-			if group != "network" && group != "tcp" && group != "tcp6" && group != "filesystem" {
+			if group != "network" && group != "tcp" && group != "tcp6" && group != "filesystem" && group != "dockerstats" {
 				cgroup := names[group]
 				// try to find cgroup mount point in cache
 				cpath, exists := c.mounts[cgroup]

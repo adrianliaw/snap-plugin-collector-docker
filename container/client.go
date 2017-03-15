@@ -30,6 +30,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"errors"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/fsouza/go-dockerclient"
@@ -171,6 +172,8 @@ func (dc *DockerClient) ListContainersAsMap() (map[string]*ContainerData, error)
 			Stats:         NewStatistics(),
 		}
 
+		dc.CollectDockerStats(&containerData)
+
 		containers[shortID] = &containerData
 	}
 
@@ -184,6 +187,28 @@ func (dc *DockerClient) ListContainersAsMap() (map[string]*ContainerData, error)
 	containers["root"] = &ContainerData{ID: "/", Stats: NewStatistics()}
 
 	return containers, nil
+}
+
+func (dc *DockerClient) CollectDockerStats(container *ContainerData) error {
+	statsChan := make(chan *docker.Stats)
+	go dc.cl.Stats(docker.StatsOptions{
+		ID: container.ID,
+		Stats: stats,
+	})
+	_ := <-statsChan
+	stats := <-statsChan
+	if stats == nil {
+		return errors.New("Failed to fetch stats")
+	}
+	cpuDelta := float64(stats.CPUStats.CPUUsage.TotalUsage) - float64(stats.PreCPUStats.CPUUsage.TotalUsage)
+	systemDelta := float64(stats.CPUStats.SystemCPUUsage) - float64(stats.PreCPUStats.SystemCPUUsage)
+	nCpus := float64(len(stats.CPUStats.CPUUsage.PercpuUsage))
+	if systemDelta > 0.0 && cpuDelta > 0.0 {
+		container.Stats.DockerStats.CpuPercentage = (cpuDelta / systemDelta) * nCpus * 100.0
+	}
+	// if err != nil {
+	//         return err
+	// }
 }
 
 // FindCgroupMountpoint returns cgroup mountpoint of a given subsystem
