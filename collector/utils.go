@@ -128,6 +128,9 @@ func getQueryGroup(ns []string) (string, error) {
 	if ns[0] == "spec" {
 		return ns[0], nil
 	}
+	if strings.Join(ns, "/") == "stats/dockerstats/cpu_percentage" {
+		return ns[0], nil
+	}
 
 	for _, ne := range ns {
 		if _, exists := getters[ne]; exists {
