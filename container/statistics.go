@@ -76,10 +76,11 @@ type ContainerData struct {
 }
 
 type Statistics struct {
-	Cgroups    *Cgroups                       `json:"cgroups,omitempty"`
-	Network    []NetworkInterface             `json:"network,omitempty"`
-	Connection TcpInterface                   `json:"connection,omitempty"`
-	Filesystem map[string]FilesystemInterface `json:"filesystem,omitempty"`
+	DockerStats DockerStats                    `json:"dockerstats,omitempty"`
+	Cgroups     *Cgroups                       `json:"cgroups,omitempty"`
+	Network     []NetworkInterface             `json:"network,omitempty"`
+	Connection  TcpInterface                   `json:"connection,omitempty"`
+	Filesystem  map[string]FilesystemInterface `json:"filesystem,omitempty"`
 }
 
 // Specification holds docker container specification
@@ -87,9 +88,14 @@ type Specification struct {
 	Status     string            `json:"status,omitempty"`
 	Created    string            `json:"creation_time,omitempty"`
 	Image      string            `json:"image_name,omitempty"`
+	Name       string            `json:"name,omitempty"`
 	SizeRw     int64             `json:"size_rw,omitempty"`
 	SizeRootFs int64             `json:"size_root_fs,omitempty"`
 	Labels     map[string]string `json:"labels,omitempty"`
+}
+
+type DockerStats struct {
+	CpuPercentage float64 `json:"cpu_percentage,omitempty"`
 }
 
 type Cgroups struct {
@@ -289,6 +295,9 @@ type TcpStat struct {
 func NewStatistics() *Statistics {
 	return &Statistics{
 		Network: []NetworkInterface{},
+		DockerStats: DockerStats{
+			CpuPercentage: 0.0,
+		},
 		Cgroups: newCgroupsStats(),
 		Connection: TcpInterface{
 			Tcp:  TcpStat{},
@@ -297,6 +306,13 @@ func NewStatistics() *Statistics {
 		Filesystem: map[string]FilesystemInterface{},
 	}
 }
+
+// func newDockerStats() *DockerStats {
+//         dockerStats := DockerStats{
+//                 CpuPercentage: 0.0,
+//         }
+//         return &DockerStats
+// }
 
 func newCgroupsStats() *Cgroups {
 	cgroups := Cgroups{
