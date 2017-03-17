@@ -820,7 +820,7 @@ func (c *collector) collect(ridGroup map[string]map[string]struct{}, procfs stri
 
 		for group := range groups {
 			// during initialization of docker client information about running containers is collected
-			if group == "spec" {
+			if group == "spec" || group == "dockerstats" {
 				continue
 			}
 
@@ -828,7 +828,7 @@ func (c *collector) collect(ridGroup map[string]map[string]struct{}, procfs stri
 				continue
 			}
 
-			if group != "network" && group != "tcp" && group != "tcp6" && group != "filesystem" && group != "dockerstats" {
+			if group != "network" && group != "tcp" && group != "tcp6" && group != "filesystem" {
 				cgroup := names[group]
 				// try to find cgroup mount point in cache
 				cpath, exists := c.mounts[cgroup]
