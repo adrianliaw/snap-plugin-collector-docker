@@ -129,7 +129,7 @@ func getQueryGroup(ns []string) (string, error) {
 		return ns[0], nil
 	}
 	if strings.Join(ns, "/") == "stats/dockerstats/cpu_percentage" {
-		return ns[0], nil
+		return ns[1], nil
 	}
 
 	for _, ne := range ns {
